@@ -3,11 +3,12 @@ html , body {
 }
 
 .app {
-  height: 100vh;
-  background-color: rgb(248, 248, 248);
+  height: 100%;
+  background-color: rgb(230, 227, 227);
 }
 
 .app__body {
+  
   display: flex;
   justify-content: flex-start;
 }

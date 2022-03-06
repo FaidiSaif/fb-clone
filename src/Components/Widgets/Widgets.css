@@ -1,0 +1,13 @@
+.widgets {
+  height: 100vh;
+  text-align: center;
+  line-height: 100%;
+  
+  width: 20%;
+}
+
+
+.widgets > iframe {
+  height: 100%;
+  width: 100%;
+} 

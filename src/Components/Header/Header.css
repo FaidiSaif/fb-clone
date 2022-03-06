@@ -6,6 +6,7 @@
   justify-content: space-between;
   box-shadow: 0px 5px 8px -9px rgba(0, 0, 0, 0.75);
   top: 0px;
+  z-index: 100;
 }
 
 .header__left {
@@ -75,16 +76,24 @@
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
+  border-radius: 999;
+  padding: 0px 10px;
+
 }
 
 .header__info > h4 {
   color: gray;
-  
   margin-left: 15px;
   margin-top: 10px;
   margin-bottom: 2px;
 }
 
+.header__info:hover {
+  background-color: rgb(231, 230, 230);
+  border-radius: 50px;
+  cursor: pointer;
+  
+}
 
 /*** just for test**/
 .test {
