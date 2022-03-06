@@ -4,34 +4,55 @@ import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 import InsertEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import "./MessageSender.css";
 import { useState } from "react";
+import db, { collection, addDoc , Timestamp  } from "../../firebase";
+import { useStateValue } from "../../StateProvider";
+
+
 
 export const MessageSender = () => {
+  const [postMessage, setPostMessage] = useState("");
+  const [imagePost, setImagePost] = useState("");
+  const [{user}, dispatch] = useStateValue(); 
+  
+  const handlePostInput = (e: React.FormEvent<HTMLInputElement>): void => {
+    setPostMessage(e.currentTarget.value);
+  };
 
-  const [post, setPost] = useState(""); 
-  const handlePostInput = (e : React.FormEvent<HTMLInputElement>):void => { 
-    setPost(e.currentTarget.value)
-  }
+  const handleImagePostInput = (e: React.FormEvent<HTMLInputElement>): void => {
+    setImagePost(e.currentTarget.value);
+  };
 
-  const [imagePost, setImagePost] = useState(""); 
-  const handleImagePostInput = (e : React.FormEvent<HTMLInputElement>):void => { 
-    setImagePost(e.currentTarget.value)
-  }
+  const handleSubmit = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    console.log("just before addign doc", {"name":  user?.displayName, "url" : user?.photoURL})
+    addDoc(collection(db, "posts"), {
+      message: postMessage,
+      profilPic: user?.photoURL,
+      username: user?.displayName,
+      image: imagePost
+    })
+      .then((resp) => console.log("added doc ..", resp))
+      .catch((e) => console.error("Error adding document: ", e));
 
-  const handleSubmit = (e : React.SyntheticEvent ) => {
-    e.preventDefault(); 
-    console.log("Submitted : ", post , imagePost)
-  }
+      setPostMessage(""); 
+      setImagePost(""); 
+
+  };
 
   return (
     <div className="messageSender">
       <div className="messageSender__top">
-        <Avatar src={"https://media-exp1.licdn.com/dms/image/C4D03AQGTmkS8TNfuDA/profile-displayphoto-shrink_800_800/0/1605539149032?e=1651708800&v=beta&t=FggsNS9GNPao7DndKRv4xCptAk91PVbcbmIcT1czdS0" } />
+        <Avatar
+          src={
+            "https://media-exp1.licdn.com/dms/image/C4D03AQGTmkS8TNfuDA/profile-displayphoto-shrink_800_800/0/1605539149032?e=1651708800&v=beta&t=FggsNS9GNPao7DndKRv4xCptAk91PVbcbmIcT1czdS0"
+          }
+        />
         <form>
           <input
             type="text"
             placeholder="What's  in your Mind"
             className="messageSender__input"
-            value={post}
+            value={postMessage}
             onChange={handlePostInput}
           />
           <input

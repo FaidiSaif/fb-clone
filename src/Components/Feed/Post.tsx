@@ -6,7 +6,8 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { ExpandMoreOutlined } from "@material-ui/icons";
 import "./Post.css";
 
-type PostPropType = {
+export type PostType = {
+  key: number
   profilePic : string ,
   image : string ,
   username : string,
@@ -15,14 +16,15 @@ type PostPropType = {
 };
 
 export const Post = ({
+  key,
   profilePic,
   image,
   username,
   timestamp,
   message,
-}: PostPropType) => {
+}: PostType) => {
   return (
-    <div className="post">
+    <div className="post" key={key}>
       <div className="post__top">
         <Avatar src={profilePic} className="post__avatar" />
         <div className="post__topInfo">

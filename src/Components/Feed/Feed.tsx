@@ -1,20 +1,47 @@
+import { StoryReel } from "./StoryReel";
+import { MessageSender } from "./MessageSender";
+import { Post, PostType } from "./Post";
+import "./Feed.css";
+import { useEffect, useState } from "react";
+import db from "../../firebase";
 
-import { StoryReel } from './StoryReel'
-import { MessageSender } from './MessageSender'
-import { Post } from './Post'
-import './Feed.css'
+import { collection, getDocs } from "../../firebase";
 
 export const Feed = () => {
+  const [posts, setPosts] = useState<PostType[]>([]);
+
+  useEffect(() => {
+    const func = async () => {
+      const querySnapshot = await getDocs(collection(db, "posts"));
+      const locPosts: PostType[] = [];
+      querySnapshot.forEach((doc) => {
+        console.log("data =====>", doc.data())
+        const { id , profilePic, image, username, timestamp, message } = doc.data();
+        locPosts.push({ key: id, profilePic: `${profilePic}`, image, username, timestamp, message });
+      });
+      setPosts(locPosts);
+    };
+    func();
+  }, []);
+
+  if (posts) {
+    console.log("posts = ", posts)
+  }
+  //console.log(posts);
   return (
-    <div className='feed'>
-      <StoryReel /> 
+    <div className="feed">
+      <StoryReel />
       <MessageSender />
-      <Post 
-        profilePic = "https://media-exp1.licdn.com/dms/image/C4D03AQGTmkS8TNfuDA/profile-displayphoto-shrink_800_800/0/1605539149032?e=1651708800&v=beta&t=FggsNS9GNPao7DndKRv4xCptAk91PVbcbmIcT1czdS0"
-        image = "https://cdn.pixabay.com/photo/2014/09/07/21/34/child-438373_960_720.jpg"
-        username = "Saif"
-        message  ="Look to this beautiful guy !"
-      />
+      {posts.map((post: PostType) => (
+        <Post
+          key={post.key}
+          profilePic={post.profilePic as string}
+          image={post.image}
+          username={post.username}
+          timestamp={post.timestamp}
+          message={post.message}
+        />
+      ))}
     </div>
-  )
-}
+  );
+};
